@@ -81,6 +81,13 @@ export default class CrudTicket extends Component {
                     disabled
                     type="checkbox" />
                 </div>
+                <div
+                  style={{
+                    color: "red",
+                    marginTop: "5px"
+                  }}
+                >
+                {this.state.message}</div>
                 <div className="form-group">
                   <input type="submit" value="Create Ticket" />
                 </div>          

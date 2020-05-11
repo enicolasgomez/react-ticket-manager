@@ -4,6 +4,7 @@ import UserService from "../services/user.service";
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import _ from 'lodash';
 
 export default class ListTicket extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class ListTicket extends Component {
         { 
           field: 'id', 
           headerName: 'ID',
+          maxWidth: 80,
           checkboxSelection: true 
         }
       ],
@@ -23,21 +25,40 @@ export default class ListTicket extends Component {
     };
     if ( this.state.login.role == 2 )
     {
+      // this.state.columnDefs.push({
+      //   headerName: "Users", 
+      //   field: "userId", 
+      //   editable: true, 
+      //   cellEditor: "agSelectCellEditor",
+      //   cellEditorParams: this.usersData.bind(this)
+      // });
       this.state.columnDefs.push({
-        headerName: "Users", 
-        field: "userId", 
-        editable: true, 
-        cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.usersData.bind(this)
+        headerName: 'Pedido', 
+        field: 'userId', 
+        editable: false,
+        cellRenderer: params => {
+            return _.find(this.state.users, function(i) { return ( i.id == params.value  ) }).email;
+        }
       });
     }
     this.state.columnDefs.push({
       headerName: 'Pedido', 
       field: 'ticket_pedido', 
       editable:false,
+      maxWidth: 80,
       cellRenderer: params => {
           return `<input type='checkbox' ${params.value ? 'checked' : ''} disabled />`;
       }
+    });
+    this.state.columnDefs.push({
+      headerName: 'Creado', 
+      field: 'createdAt', 
+      editable:false
+    });
+    this.state.columnDefs.push({
+      headerName: 'Actualizado', 
+      field: 'updatedAt', 
+      editable:false
     });
   }
 
@@ -56,7 +77,7 @@ export default class ListTicket extends Component {
         if ( r.data && r.data.length > 0 )
         {
           r.data.forEach(function(row) {
-            data.push({ id : row.id, userId: row.userId, ticket_pedido: row.ticket_pedido });
+            data.push({ id : row.id, userId: row.userId, ticket_pedido: row.ticket_pedido, createdAt: row.createdAt, updatedAt: row.updatedAt });
           });
         }
         this.setState({ rowData : data });
