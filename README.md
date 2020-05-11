@@ -65,6 +65,8 @@ The page will reload if you make edits.
 
 ### Login
 
+```
 admin / admin
 user / user 
+```
 
